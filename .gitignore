@@ -66,3 +66,6 @@ credentials/
 .claude/pai_updates/
 .claude/pai_backups/
 .claude/.pai-sync-history
+
+# PAI History System (private/sensitive content)
+.claude/history/
