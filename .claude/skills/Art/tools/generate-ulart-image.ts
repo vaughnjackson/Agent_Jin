@@ -39,7 +39,7 @@ async function loadEnv(): Promise<void> {
       let value = trimmed.slice(eqIndex + 1).trim();
       // Remove surrounding quotes if present
       if ((value.startsWith('"') && value.endsWith('"')) ||
-          (value.startsWith("'") && value.endsWith("'"))) {
+        (value.startsWith("'") && value.endsWith("'"))) {
         value = value.slice(1, -1);
       }
       // Only set if not already defined (allow overrides from shell)
@@ -196,8 +196,8 @@ ERROR CODES:
   1  General error (invalid arguments, API error, file write error)
 
 MORE INFO:
-  Documentation: ${PAI_DIR}/skills/art/README.md
-  Source: ${PAI_DIR}/skills/art/tools/generate-ulart-image.ts
+  Documentation: ~/.claude/skills/Art/README.md
+  Source: ~/.claude/skills/Art/tools/generate-ulart-image.ts
 `);
   process.exit(0);
 }
@@ -577,25 +577,41 @@ async function generateWithFluxOpenRouter(prompt: string, size: ReplicateSize, o
 }
 
 async function generateWithNanoBanana(prompt: string, size: ReplicateSize, output: string): Promise<void> {
+  // Try Replicate first
   const token = process.env.REPLICATE_API_TOKEN;
-  if (!token) {
-    throw new CLIError("Missing environment variable: REPLICATE_API_TOKEN");
+  if (token) {
+    try {
+      const replicate = new Replicate({ auth: token });
+      console.log("🍌 Generating with Nano Banana (Replicate)...");
+
+      const result = await replicate.run("google/nano-banana", {
+        input: {
+          prompt,
+          aspect_ratio: size,
+          output_format: "png",
+        },
+      });
+
+      await writeFile(output, result);
+      console.log(`✅ Image saved to ${output}`);
+      return;
+    } catch (error) {
+      console.log("⚠️  Replicate Nano Banana failed, trying OpenRouter fallback...");
+    }
+  } else {
+    console.log("⚠️  No Replicate token, using OpenRouter fallback...");
   }
 
-  const replicate = new Replicate({ auth: token });
+  // Fallback to OpenRouter with Gemini
+  try {
+    await generateWithNanoBananaOpenRouter(prompt, size, output);
+    return;
+  } catch (error) {
+    console.log("⚠️  OpenRouter Gemini failed, trying Flux fallback...");
+  }
 
-  console.log("🍌 Generating with Nano Banana...");
-
-  const result = await replicate.run("google/nano-banana", {
-    input: {
-      prompt,
-      aspect_ratio: size,
-      output_format: "png",
-    },
-  });
-
-  await writeFile(output, result);
-  console.log(`✅ Image saved to ${output}`);
+  // Final fallback to Flux via OpenRouter
+  await generateWithFluxOpenRouter(prompt, size, output);
 }
 
 async function generateWithGPTImage(prompt: string, size: OpenAISize, output: string): Promise<void> {
@@ -718,6 +734,33 @@ async function generateWithNanoBananaPro(
   console.log(`✅ Image saved to ${output}`);
 }
 
+async function generateWithNanaBananaProWithFallback(
+  prompt: string,
+  size: GeminiSize,
+  aspectRatio: ReplicateSize,
+  output: string,
+  referenceImage?: string
+): Promise<void> {
+  // Try Google Gemini API first
+  try {
+    await generateWithNanoBananaPro(prompt, size, aspectRatio, output, referenceImage);
+    return;
+  } catch (error) {
+    console.log("⚠️  Gemini API failed, trying OpenRouter Nano Banana fallback...");
+  }
+
+  // Fallback to OpenRouter with Nano Banana (Gemini via OpenRouter)
+  try {
+    await generateWithNanoBananaOpenRouter(prompt, aspectRatio, output);
+    return;
+  } catch (error) {
+    console.log("⚠️  OpenRouter Nano Banana failed, trying Flux fallback...");
+  }
+
+  // Final fallback to Flux via OpenRouter
+  await generateWithFluxOpenRouter(prompt, aspectRatio, output);
+}
+
 // ============================================================================
 // Main
 // ============================================================================
@@ -758,7 +801,7 @@ async function main(): Promise<void> {
           promises.push(generateWithNanoBanana(finalPrompt, args.size as ReplicateSize, varOutput));
         } else if (args.model === "nano-banana-pro") {
           promises.push(
-            generateWithNanoBananaPro(
+            generateWithNanaBananaProWithFallback(
               finalPrompt,
               args.size as GeminiSize,
               args.aspectRatio!,
@@ -782,7 +825,7 @@ async function main(): Promise<void> {
     } else if (args.model === "nano-banana") {
       await generateWithNanoBanana(finalPrompt, args.size as ReplicateSize, args.output);
     } else if (args.model === "nano-banana-pro") {
-      await generateWithNanoBananaPro(
+      await generateWithNanaBananaProWithFallback(
         finalPrompt,
         args.size as GeminiSize,
         args.aspectRatio!,

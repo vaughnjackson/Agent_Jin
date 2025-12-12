@@ -1,0 +1,44 @@
+Editorial conceptual illustration in Saul Steinberg / New Yorker style.
+
+WHITE BACKGROUND (#FFFFFF) for transparency removal.
+
+STYLE: Hand-drawn black ink linework with these characteristics:
+- Variable stroke weight (thicker where pressure would be)
+- Imperfect, slightly wobbly lines (human quality)
+- Gestural brush strokes, NOT smooth vectors
+- Risograph / editorial aesthetic
+
+COMPOSITION (2-3 elements only):
+Two hands pulling apart a television screen like it's a pair of curtains, tearing the TV frame open in the center. Behind the torn TV screen, an ordinary Black man in business casual attire (button-down shirt, slacks) holding a briefcase, looking natural and everyday—not dramatic or posed.
+
+The TV frame should look like it's being ripped or pulled apart like fabric, with jagged torn edges. The hands grip the edges of the frame firmly, pulling outward.
+
+The man behind should be drawn simply and naturally—ordinary, calm, professional. He represents the "invisible" everyday person, not a dramatic figure.
+
+Elements drawn with bold BLACK LINEWORK as primary.
+Deep Purple (#4A148C) used sparingly on the man's shirt or briefcase as small ACCENT details only (5-10% of the man, not dominant).
+Optional: Very subtle Deep Teal (#00796B) on one small element.
+
+COLORS:
+- BLACK is the PRIMARY color for all linework and main shapes
+- Deep Purple #4A148C as small ACCENT only on the revealed man (shirt collar, briefcase detail—hints, not dominant)
+- Teal #00796B sparingly if at all
+
+The image should be predominantly BLACK LINEWORK with color used sparingly as accents on the revealed figure to draw the eye.
+
+COMPOSITION: Full-bleed edge-to-edge. NO whitespace or margins.
+Elements extend to or bleed off edges (hands reach from sides, TV frame fills frame). 100% frame fill.
+
+The focal point is the contrast between the torn TV frame (media) and the ordinary man being revealed behind it (reality).
+
+CRITICAL REQUIREMENTS:
+- FLAT colors only — NO gradients, NO shading
+- NO shadows of any kind
+- Lines must look hand-drawn, NOT perfect vectors
+- Color is ACCENT only on the revealed man, black linework dominates everything
+- The man should look ORDINARY and everyday, not dramatic
+- The TV frame should look torn/ripped like fabric or paper, not just opened
+- This is about REVEALING the invisible, so the man should feel natural, not posed
+
+Sign "Jin" as a tiny artist signature in charcoal (#2D2D2D) bottom right corner.
+NO other text anywhere.
