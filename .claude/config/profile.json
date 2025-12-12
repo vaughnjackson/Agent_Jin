@@ -1,0 +1,19 @@
+{
+  "user": {
+    "name": "Vaughn",
+    "email": "jackson.vaughn@gmail.com"
+  },
+  "assistant": {
+    "name": "Jin",
+    "color": "purple"
+  },
+  "paths": {
+    "pai_dir": "/Users/vaughnworks/AI_SYSTEM_PLAYGROUND/Digital_Assistant/Agent_Jin/.claude"
+  },
+  "voice": {
+    "port": 8888,
+    "enabled": false
+  },
+  "created": "2025-12-11T01:58:38.798Z",
+  "version": "1.0.0"
+}

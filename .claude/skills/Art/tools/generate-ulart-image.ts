@@ -127,6 +127,7 @@ function showHelp(): void {
 generate-ulart-image - UL Image Generation CLI
 
 Generate Unsupervised Learning branded images using Flux 1.1 Pro, Nano Banana, or GPT-image-1.
+Flux model uses Nano Banana (Gemini 3 Pro) via OpenRouter first, falls back to Flux 2 Pro if needed.
 
 USAGE:
   generate-ulart-image --model <model> --prompt "<prompt>" [OPTIONS]
@@ -183,10 +184,12 @@ NOTE: For true creative diversity with different prompts, use the creative workf
 integrates the be-creative skill. CLI creative mode generates multiple images with the SAME prompt.
 
 ENVIRONMENT VARIABLES:
-  REPLICATE_API_TOKEN  Required for flux and nano-banana models
-  OPENAI_API_KEY       Required for gpt-image-1 model
-  GOOGLE_API_KEY       Required for nano-banana-pro model
-  REMOVEBG_API_KEY     Required for --remove-bg flag
+  OPENROUTER_API_KEY      Primary for flux model (uses Nano Banana, fallback to Flux 2 Pro)
+  OPENROUTER_BASE_URL     OpenRouter base URL (default: https://openrouter.ai/api/v1)
+  REPLICATE_API_TOKEN     Required for nano-banana model (original Nano Banana on Replicate)
+  OPENAI_API_KEY          Required for gpt-image-1 model
+  GOOGLE_API_KEY          Required for nano-banana-pro model
+  REMOVEBG_API_KEY        Required for --remove-bg flag
 
 ERROR CODES:
   0  Success
@@ -373,26 +376,203 @@ async function removeBackground(imagePath: string): Promise<void> {
 // ============================================================================
 
 async function generateWithFlux(prompt: string, size: ReplicateSize, output: string): Promise<void> {
-  const token = process.env.REPLICATE_API_TOKEN;
-  if (!token) {
-    throw new CLIError("Missing environment variable: REPLICATE_API_TOKEN");
+  // Try Nano Banana via OpenRouter FIRST (better with text in images)
+  try {
+    await generateWithNanoBananaOpenRouter(prompt, size, output);
+    return;
+  } catch (error) {
+    console.log("⚠️  Nano Banana failed, trying Flux fallback...");
   }
 
-  const replicate = new Replicate({ auth: token });
+  // Fallback to Flux via OpenRouter
+  await generateWithFluxOpenRouter(prompt, size, output);
+}
 
-  console.log("🎨 Generating with Flux 1.1 Pro...");
+async function generateWithNanoBananaOpenRouter(prompt: string, size: ReplicateSize, output: string): Promise<void> {
+  const apiKey = process.env.OPENROUTER_API_KEY;
+  const baseURL = process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1';
 
-  const result = await replicate.run("black-forest-labs/flux-1.1-pro", {
-    input: {
-      prompt,
-      aspect_ratio: size,
-      output_format: "png",
-      output_quality: 95,
-      prompt_upsampling: false,
-    },
+  if (!apiKey) {
+    throw new CLIError("Missing environment variable: OPENROUTER_API_KEY");
+  }
+
+  console.log("🍌 Generating with Nano Banana (google/gemini-3-pro-image-preview via OpenRouter)...");
+
+  // Convert aspect ratio to approximate pixel dimensions for OpenRouter
+  const dimensionsMap: Record<ReplicateSize, { width: number; height: number }> = {
+    "1:1": { width: 1024, height: 1024 },
+    "16:9": { width: 1920, height: 1080 },
+    "9:16": { width: 1080, height: 1920 },
+    "3:2": { width: 1536, height: 1024 },
+    "2:3": { width: 1024, height: 1536 },
+    "4:3": { width: 1408, height: 1056 },
+    "3:4": { width: 1056, height: 1408 },
+    "5:4": { width: 1280, height: 1024 },
+    "4:5": { width: 1024, height: 1280 },
+    "21:9": { width: 2560, height: 1080 },
+  };
+
+  const dimensions = dimensionsMap[size];
+
+  const openai = new OpenAI({
+    apiKey,
+    baseURL
   });
 
-  await writeFile(output, result);
+  // OpenRouter uses chat completion API with modalities for image generation
+  const response = await openai.chat.completions.create({
+    model: "google/gemini-3-pro-image-preview",
+    messages: [
+      {
+        role: "user",
+        content: `Generate an image with dimensions ${dimensions.width}x${dimensions.height}: ${prompt}`
+      }
+    ],
+    // @ts-ignore - OpenRouter extends OpenAI API with modalities
+    modalities: ["image", "text"],
+  });
+
+  // Extract base64 image from response
+  const message = response.choices[0]?.message;
+  if (!message) {
+    throw new CLIError("No message returned from OpenRouter API");
+  }
+
+  // OpenRouter returns images in a separate images array
+  let imageData: string | undefined;
+
+  // @ts-ignore - OpenRouter extends message with images array
+  if (message.images && Array.isArray(message.images)) {
+    // @ts-ignore
+    const firstImage = message.images[0];
+    if (firstImage?.image_url?.url) {
+      const match = firstImage.image_url.url.match(/data:image\/\w+;base64,([^"]+)/);
+      if (match) {
+        imageData = match[1];
+      }
+    }
+  }
+
+  // Fallback: check content field
+  if (!imageData && message.content) {
+    if (typeof message.content === 'string') {
+      const match = message.content.match(/data:image\/\w+;base64,([^"]+)/);
+      if (match) {
+        imageData = match[1];
+      }
+    } else if (Array.isArray(message.content)) {
+      for (const part of message.content) {
+        if (part.type === 'image_url' && part.image_url?.url) {
+          const match = part.image_url.url.match(/data:image\/\w+;base64,([^"]+)/);
+          if (match) {
+            imageData = match[1];
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  if (!imageData) {
+    throw new CLIError("No image data found in OpenRouter response");
+  }
+
+  const imageBuffer = Buffer.from(imageData, "base64");
+  await writeFile(output, imageBuffer);
+  console.log(`✅ Image saved to ${output}`);
+}
+
+async function generateWithFluxOpenRouter(prompt: string, size: ReplicateSize, output: string): Promise<void> {
+  const apiKey = process.env.OPENROUTER_API_KEY;
+  const baseURL = process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1';
+
+  if (!apiKey) {
+    throw new CLIError("Missing environment variable: OPENROUTER_API_KEY (fallback required)");
+  }
+
+  console.log("🎨 Generating with Flux 2 Pro (OpenRouter)...");
+
+  // Convert aspect ratio to approximate pixel dimensions for OpenRouter
+  const dimensionsMap: Record<ReplicateSize, { width: number; height: number }> = {
+    "1:1": { width: 1024, height: 1024 },
+    "16:9": { width: 1920, height: 1080 },
+    "9:16": { width: 1080, height: 1920 },
+    "3:2": { width: 1536, height: 1024 },
+    "2:3": { width: 1024, height: 1536 },
+    "4:3": { width: 1408, height: 1056 },
+    "3:4": { width: 1056, height: 1408 },
+    "5:4": { width: 1280, height: 1024 },
+    "4:5": { width: 1024, height: 1280 },
+    "21:9": { width: 2560, height: 1080 },
+  };
+
+  const dimensions = dimensionsMap[size];
+
+  const openai = new OpenAI({
+    apiKey,
+    baseURL
+  });
+
+  // OpenRouter uses chat completion API with modalities for image generation
+  const response = await openai.chat.completions.create({
+    model: "black-forest-labs/flux.2-pro",
+    messages: [
+      {
+        role: "user",
+        content: `Generate an image with dimensions ${dimensions.width}x${dimensions.height}: ${prompt}`
+      }
+    ],
+    // @ts-ignore - OpenRouter extends OpenAI API with modalities
+    modalities: ["image", "text"],
+  });
+
+  // Extract base64 image from response
+  const message = response.choices[0]?.message;
+  if (!message) {
+    throw new CLIError("No message returned from OpenRouter API");
+  }
+
+  // OpenRouter returns images in a separate images array
+  let imageData: string | undefined;
+
+  // @ts-ignore - OpenRouter extends message with images array
+  if (message.images && Array.isArray(message.images)) {
+    // @ts-ignore
+    const firstImage = message.images[0];
+    if (firstImage?.image_url?.url) {
+      const match = firstImage.image_url.url.match(/data:image\/\w+;base64,([^"]+)/);
+      if (match) {
+        imageData = match[1];
+      }
+    }
+  }
+
+  // Fallback: check content field
+  if (!imageData && message.content) {
+    if (typeof message.content === 'string') {
+      const match = message.content.match(/data:image\/\w+;base64,([^"]+)/);
+      if (match) {
+        imageData = match[1];
+      }
+    } else if (Array.isArray(message.content)) {
+      for (const part of message.content) {
+        if (part.type === 'image_url' && part.image_url?.url) {
+          const match = part.image_url.url.match(/data:image\/\w+;base64,([^"]+)/);
+          if (match) {
+            imageData = match[1];
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  if (!imageData) {
+    throw new CLIError("No image data found in OpenRouter response");
+  }
+
+  const imageBuffer = Buffer.from(imageData, "base64");
+  await writeFile(output, imageBuffer);
   console.log(`✅ Image saved to ${output}`);
 }
 
