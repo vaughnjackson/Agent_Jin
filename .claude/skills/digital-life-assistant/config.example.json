@@ -1,0 +1,30 @@
+{
+  "google_calendar": {
+    "enabled": false,
+    "credentials_path": "/path/to/credentials.json",
+    "token_path": "/path/to/token.json",
+    "calendar_id": "primary"
+  },
+  "notion": {
+    "enabled": false,
+    "api_token": "YOUR_NOTION_INTEGRATION_TOKEN",
+    "database_id": "YOUR_NOTION_DATABASE_ID"
+  },
+  "todoist": {
+    "enabled": false,
+    "api_token": "YOUR_TODOIST_API_TOKEN"
+  },
+  "preferences": {
+    "work_hours_start": "09:00",
+    "work_hours_end": "18:00",
+    "default_task_priority": "medium",
+    "default_reminder_minutes": 60,
+    "weekly_review_day": "sunday",
+    "backup_retention_days": 90
+  },
+  "notifications": {
+    "task_due_warning_hours": 24,
+    "habit_streak_milestones": [7, 14, 21, 30, 60, 90, 100, 180, 365],
+    "show_motivational_messages": true
+  }
+}

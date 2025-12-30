@@ -1,0 +1,38 @@
+{
+  "state": "Texas",
+  "cities_data": [
+    {
+      "city": "Austin",
+      "active_listings": 8500,
+      "avg_nightly_rate": 185,
+      "avg_occupancy_rate": 0.72,
+      "tourism_score": 8,
+      "regulatory_environment": "friendly",
+      "competition_level": "High",
+      "market_growth_trend": "Growing",
+      "features": ["major_universities", "theme_parks", "concert_halls", "business_districts"]
+    },
+    {
+      "city": "San Antonio",
+      "active_listings": 3200,
+      "avg_nightly_rate": 145,
+      "avg_occupancy_rate": 0.68,
+      "tourism_score": 7,
+      "regulatory_environment": "friendly",
+      "competition_level": "Medium",
+      "market_growth_trend": "Stable",
+      "features": ["historical_sites", "theme_parks", "convention_centers"]
+    },
+    {
+      "city": "Houston",
+      "active_listings": 5100,
+      "avg_nightly_rate": 155,
+      "avg_occupancy_rate": 0.65,
+      "tourism_score": 6,
+      "regulatory_environment": "moderate",
+      "competition_level": "Medium",
+      "market_growth_trend": "Stable",
+      "features": ["corporate_headquarters", "medical_centers", "airports", "business_districts"]
+    }
+  ]
+}

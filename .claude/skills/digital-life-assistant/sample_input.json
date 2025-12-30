@@ -1,0 +1,11 @@
+{
+  "action": "create_task",
+  "task": {
+    "title": "Finish quarterly report",
+    "description": "Complete Q4 financial analysis and submit to management",
+    "priority": "high",
+    "due_date": "2025-01-05",
+    "category": "work",
+    "tags": ["urgent", "finance", "quarterly"]
+  }
+}

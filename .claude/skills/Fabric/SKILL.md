@@ -1,9 +1,21 @@
 ---
-name: fabric
-description: Native Fabric pattern execution for Claude Code. USE WHEN processing content with Fabric patterns (extract_wisdom, summarize, analyze_claims, threat modeling, etc.). Patterns run natively in Claude's context - no CLI spawning needed. Only use fabric CLI for YouTube transcripts (-y) or pattern updates (-U).
+name: Fabric
+description: Native Fabric pattern execution for Claude Code with automated book extraction to history. USE WHEN processing content with Fabric patterns (extract_wisdom, summarize, analyze_claims, threat modeling, etc.) OR user says "extract book ideas", "extract book recommendations", "save book extraction". Patterns run natively in Claude's context - no CLI spawning needed. Only use fabric CLI for YouTube transcripts (-y) or pattern updates (-U).
 ---
 
 # Fabric Skill - Native Pattern Execution
+
+## Workflow Routing
+
+**When executing a workflow, call the notification script via Bash:**
+
+```bash
+${PAI_DIR}/tools/skill-workflow-notification WorkflowName Fabric
+```
+
+| Workflow | Trigger | File |
+|----------|---------|------|
+| **ExtractBook** | "extract book ideas", "extract book recommendations", "save book extraction" | `workflows/ExtractBook.md` |
 
 ## The Key Insight
 
@@ -136,3 +148,34 @@ ls tools/patterns/
 ```
 
 Or browse: `tools/patterns/{pattern_name}/system.md`
+
+## Examples
+
+**Example 1: Extract book ideas with auto-save**
+```
+User: "Extract book ideas for The Almanack of Naval Ravikant by Eric Jorgenson"
+→ Invokes ExtractBook workflow
+→ Reads extract_book_ideas pattern
+→ Applies pattern natively to book content
+→ Formats with metadata, sources, and book overview
+→ Saves to .claude/history/extractions/2025-12/almanack-naval-ravikant-ideas.md
+→ Notifies observability system
+→ Returns clickable link to user
+```
+
+**Example 2: Native pattern execution**
+```
+User: "Summarize this article: [URL]"
+→ Reads tools/patterns/summarize/system.md
+→ Applies pattern to fetched article content
+→ Returns structured summary immediately
+→ No external CLI calls, uses full Claude context
+```
+
+**Example 3: Threat modeling**
+```
+User: "Create a threat model for our authentication API"
+→ Reads tools/patterns/create_threat_model/system.md
+→ Applies STRIDE framework to API description
+→ Returns comprehensive threat analysis
+```

@@ -6,11 +6,32 @@
 
 ## 🎯 Quick Start for New Sessions
 
-When starting a new session, read this file first to understand:
+**🚨 MANDATORY ACTIONS - DO THIS IMMEDIATELY WHEN STARTING A SESSION:**
+
+1. **Read this file (CLAUDE.md)** - You're doing this now ✓
+2. **Load ALL critical skill documentation** - Read these files immediately:
+   - `.claude/skills/CORE/SKILL.md` - System identity and core capabilities
+   - `.claude/skills/Art/SKILL.md` - Visual content generation workflows
+   - `.claude/skills/Fabric/SKILL.md` - 248+ AI patterns for various tasks
+   - `.claude/skills/Research/SKILL.md` - Multi-source research capabilities
+   - `.claude/skills/StoryExplanation/SKILL.md` - Narrative format system
+   - `.claude/agents/*.md` - ALL agent personalities (Pentester, etc.)
+3. **Be contextually aware** - After reading skills/agents, automatically invoke the appropriate skill or agent based on user prompts
+4. **Don't ask which to use** - The skill/agent documentation tells you WHEN to activate
+
+**Why this matters:**
+- Skills define WHEN they should be used (routing logic)
+- Agents define their specialization and triggers
+- You must know these upfront to respond correctly
+- User expects you to auto-route to the right capability
+
+After reading CLAUDE.md, you should understand:
 - System architecture and key components
 - Location of critical files and documentation
 - Common workflows and commands
 - Project-specific conventions
+- **ALL available skills and when to use them**
+- **ALL available agents and their specializations**
 
 ---
 
@@ -68,6 +89,8 @@ Agent_Jin/
 │   │   ├── Createskill/         # Skill creation templates
 │   │   ├── Prompting/           # Prompt engineering
 │   │   ├── AlexHormoziPitch/    # Business pitch generation
+│   │   ├── airbnb-investment-analyzer/ # Airbnb property analysis
+│   │   ├── digital-life-assistant/ # Personal life management system
 │   │   └── Ffuf/                # Web fuzzing
 │   ├── agents/                  # Specialized AI personalities
 │   ├── hooks/                   # Event-driven automation
@@ -113,6 +136,8 @@ Skills are **self-contained AI capabilities** with:
 | **Createskill** | Skill creation templates | `.claude/skills/Createskill/` |
 | **Prompting** | Prompt engineering patterns | `.claude/skills/Prompting/` |
 | **AlexHormoziPitch** | Business pitch generation | `.claude/skills/AlexHormoziPitch/` |
+| **airbnb-investment-analyzer** | Airbnb property investment analysis | `.claude/skills/airbnb-investment-analyzer/` |
+| **digital-life-assistant** | Personal life management system | `.claude/skills/digital-life-assistant/` |
 | **Ffuf** | Web fuzzing integration | `.claude/skills/Ffuf/` |
 
 ---
@@ -333,14 +358,28 @@ Check these locations to understand:
 
 ## ✅ Session Checklist
 
-When starting a new session:
+**MANDATORY - Complete ALL items when starting a new session:**
 
 - [ ] Read this file (CLAUDE.md)
+- [ ] **READ ALL SKILL.md FILES** from critical skills:
+  - [ ] `.claude/skills/CORE/SKILL.md`
+  - [ ] `.claude/skills/Art/SKILL.md`
+  - [ ] `.claude/skills/Fabric/SKILL.md` - 248+ AI patterns + ExtractBook workflow with auto-save to history
+  - [ ] `.claude/skills/Research/SKILL.md`
+  - [ ] `.claude/skills/StoryExplanation/SKILL.md`
+- [ ] **READ ALL AGENT FILES** from `.claude/agents/`:
+  - [ ] `.claude/agents/Pentester.md`
+  - [ ] Any other agent personality files
 - [ ] Check `.claude/scratchpad/` for current work
 - [ ] Review `.claude/settings.json` for user preferences
 - [ ] Check `.claude/agent-sessions.json` for active sessions
-- [ ] Load relevant skill documentation if needed
 - [ ] Review `.claude/history/sessions/` for recent context
+
+**After completing checklist:**
+- You should know WHEN to activate each skill (from their routing logic)
+- You should know WHEN to use each agent (from their specializations)
+- You should AUTOMATICALLY route to the right capability based on user prompts
+- You should NOT ask the user which skill/agent to use - the documentation tells you
 
 ---
 

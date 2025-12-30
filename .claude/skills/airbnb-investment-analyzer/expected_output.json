@@ -1,0 +1,73 @@
+{
+  "analysis_type": "comprehensive_investment_analysis",
+  "property": {
+    "address": "123 Main St, Austin, TX",
+    "purchase_price": 450000
+  },
+  "investment_metrics": {
+    "total_cash_invested": 161250,
+    "annual_gross_rental_income": 51465,
+    "annual_operating_expenses": 18012,
+    "net_operating_income": 33453,
+    "annual_debt_service": 22509,
+    "annual_cash_flow": 10944,
+    "monthly_cash_flow": 912,
+    "cap_rate": 0.0743,
+    "cash_on_cash_return": 0.0679,
+    "roi": 0.0679,
+    "payback_period_years": 14.7,
+    "debt_service_coverage_ratio": 1.49
+  },
+  "rental_income_projection": {
+    "base_nightly_rate": 188.50,
+    "base_occupancy_rate": 0.73,
+    "annual_gross_income": 51465,
+    "average_monthly_income": 4289,
+    "seasonality_type": "urban_business",
+    "comparables_used": 3,
+    "income_range": {
+      "low": 46319,
+      "mid": 51465,
+      "high": 56612,
+      "confidence_level": "realistic"
+    }
+  },
+  "market_analysis": {
+    "city": "Austin",
+    "market_score": 82.5,
+    "investment_potential": "Excellent",
+    "key_demand_drivers": [
+      "major_universities",
+      "business_travel",
+      "events"
+    ],
+    "regulatory_environment": "friendly",
+    "competition_level": "High"
+  },
+  "valuation": {
+    "income_approach_value": 450446,
+    "estimated_value_range": {
+      "low": 430000,
+      "mid": 450000,
+      "high": 470000
+    },
+    "confidence_level": "Moderate"
+  },
+  "investment_assessment": {
+    "overall_score": 76.8,
+    "overall_grade": "B",
+    "recommendation": "Buy",
+    "strengths": [
+      "Strong market fundamentals",
+      "Good cash flow ($912/month)",
+      "Healthy debt coverage (1.49 DSCR)",
+      "Favorable regulatory environment"
+    ],
+    "concerns": [
+      "High competition level",
+      "14.7 year payback period",
+      "Operating expense ratio at 35%"
+    ],
+    "risk_level": "Medium"
+  }
+}

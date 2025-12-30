@@ -69,3 +69,17 @@ credentials/
 
 # PAI History System (private/sensitive content)
 .claude/history/
+
+# PAI Scratchpad (temporary work, session-specific files)
+.claude/scratchpad/
+
+# Experimental images and text (local testing/analysis)
+.claude/exp_imgs_&_txt/
+
+# Personal data (actual user data, not examples)
+.claude/skills/digital-life-assistant/data/
+.claude/config/profile.json
+
+# Personal configuration files (use .example versions as templates)
+.claude/settings.json
+.claude/agent-sessions.json

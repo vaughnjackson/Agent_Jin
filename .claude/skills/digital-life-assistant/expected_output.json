@@ -1,0 +1,21 @@
+{
+  "status": "success",
+  "task": {
+    "id": "abc123-uuid-here",
+    "title": "Finish quarterly report",
+    "description": "Complete Q4 financial analysis and submit to management",
+    "priority": "high",
+    "status": "pending",
+    "due_date": "2025-01-05",
+    "category": "work",
+    "tags": ["urgent", "finance", "quarterly"],
+    "created_at": "2025-12-30T10:00:00Z",
+    "completed_at": null,
+    "updated_at": "2025-12-30T10:00:00Z"
+  },
+  "message": "Task created successfully. Due in 6 days.",
+  "recommendations": [
+    "This is a high-priority task - consider working on it today",
+    "You have 3 other work tasks this week - check for conflicts"
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "property_details": {
+    "address": "123 Main St, Austin, TX",
+    "purchase_price": 450000,
+    "bedrooms": 3,
+    "bathrooms": 2.5,
+    "square_feet": 1800,
+    "property_age_years": 10
+  },
+  "financial_assumptions": {
+    "down_payment_percent": 0.25,
+    "interest_rate": 0.07,
+    "loan_term_years": 30,
+    "closing_costs": 13500,
+    "renovation_costs": 20000,
+    "furniture_costs": 15000
+  },
+  "comparable_properties": [
+    {
+      "listing_id": "ABNB-001",
+      "nightly_rate": 195,
+      "occupancy_rate": 0.75,
+      "bedrooms": 3,
+      "bathrooms": 2,
+      "reviews_count": 87,
+      "rating": 4.8,
+      "distance_miles": 0.5
+    },
+    {
+      "listing_id": "ABNB-002",
+      "nightly_rate": 175,
+      "occupancy_rate": 0.70,
+      "bedrooms": 3,
+      "bathrooms": 2,
+      "reviews_count": 52,
+      "rating": 4.6,
+      "distance_miles": 1.2
+    },
+    {
+      "listing_id": "ABNB-003",
+      "nightly_rate": 210,
+      "occupancy_rate": 0.78,
+      "bedrooms": 4,
+      "bathrooms": 3,
+      "reviews_count": 134,
+      "rating": 4.9,
+      "distance_miles": 0.8
+    }
+  ],
+  "market_data": {
+    "avg_occupancy_rate": 0.72,
+    "competition_level": "High",
+    "tourism_score": 8,
+    "regulatory_friendliness": 7,
+    "regulatory_environment": "friendly",
+    "saturation_level": "Medium"
+  }
+}

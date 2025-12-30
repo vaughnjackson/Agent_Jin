@@ -1,0 +1,31 @@
+# Configuration files (may contain API tokens)
+config.json
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Backup files
+*.backup
+*.bak
+*.old
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Data backups (keep local only)
+data/backups/
+
+# Development files
+.pytest_cache/
+*.log
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo

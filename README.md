@@ -225,6 +225,8 @@ Explore example skills in `.claude/skills/`:
 | **BrightData/** | Four-tier progressive web scraping with automatic fallback |
 | **Fabric/** | **Native Fabric patterns** — 248 patterns run directly in Claude's context (no CLI needed) |
 | **Research/** | Multi-source research workflows |
+| **airbnb-investment-analyzer/** | Comprehensive Airbnb property investment analysis with market research and financial modeling |
+| **digital-life-assistant/** | Personal life management system tracking growth, tasks, habits, schedules, and reminders with local data persistence |
 | **Createskill/** | Templates for creating new skills |
 
 Each skill demonstrates the skills-as-containers pattern with routing, workflows, and self-contained documentation.
